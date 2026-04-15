@@ -1,0 +1,1 @@
+{"mandatory": ["vibration", "temperature", "pressure", "voltage", "current"], "optional": ["humidity", "sound", "rpm", "network_delay", "encoder"], "all": ["vibration", "temperature", "pressure", "voltage", "current", "humidity", "sound", "rpm", "network_delay", "encoder"]}

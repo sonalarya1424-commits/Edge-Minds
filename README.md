@@ -1,1 +1,2 @@
-# Edge-Minds
+# EDGE-MINDS 
+Predictive Maintenance system using Edge AI 

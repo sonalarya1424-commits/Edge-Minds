@@ -1,0 +1,3306 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>SecurePredict Dashboard</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            color: #38bdf8;
+        }
+
+        /* NEW LAYOUT */
+        .main {
+            display: flex;
+        }
+
+        .container {
+            width: 70%;
+            margin: auto;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 30%;
+            background: #020617;
+            padding: 20px;
+            border-left: 2px solid #38bdf8;
+        }
+
+        .sidebar h3 {
+            color: #38bdf8;
+        }
+
+        #ai_explanation {
+            margin-top: 15px;
+            line-height: 1.5;
+            color: #cbd5f5;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        input {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #334155;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            background: #475569;
+            box-shadow: 0 0 5px #38bdf8;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:first-child {
+            background: #22c55e;
+            color: white;
+        }
+
+        button:last-child {
+            background: #f59e0b;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+            transform: scale(1.05);
+        }
+
+        .output {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .prediction {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .cyber {
+            color: #f87171;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 13px;
+            margin-bottom: 3px;
+            display: block;
+            color: #94a3b8;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<h2>🔐 SecurePredict Dashboard</h2>
+
+<div class="main">
+
+    
+    <div class="container">
+
+        <div class="grid">
+
+            <div class="field"><label>Vibration</label><input id="vibration"></div>
+            <div class="field"><label>Temperature</label><input id="temperature"></div>
+            <div class="field"><label>Pressure</label><input id="pressure"></div>
+            <div class="field"><label>Voltage</label><input id="voltage"></div>
+            <div class="field"><label>Current</label><input id="current"></div>
+            <div class="field"><label>RPM</label><input id="rpm"></div>
+            <div class="field"><label>Network Delay</label><input id="network_delay"></div>
+            <div class="field"><label>Device ID</label><input id="device_id"></div>
+            <div class="field"><label>Sound</label><input id="sound"></div>
+            <div class="field"><label>Humidity</label><input id="humidity"></div>
+
+        </div>
+
+        <div class="buttons">
+            <button onclick="predict()">Predict</button>
+            <button onclick="simulate()">Auto Simulate</button>
+        </div>
+
+        <div class="output">
+            <h3 class="prediction" id="prediction">Prediction: </h3>
+            <h3 class="cyber" id="cyber">Cyber Analysis: </h3>
+        </div>
+
+    </div>
+
+    
+    <div class="sidebar">
+        <h3>🧠 AI Explanation</h3>
+        <p id="ai_explanation">Waiting for analysis...</p>
+    </div>
+
+</div>
+
+<script>
+function predict(){
+    fetch('/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            vibration: document.getElementById('vibration').value,
+            temperature: document.getElementById('temperature').value,
+            sound: document.getElementById('sound').value,
+            rpm: document.getElementById('rpm').value,
+            network_delay: document.getElementById('network_delay').value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        // AI explanation (simple example)
+        document.getElementById('ai_explanation').innerText =
+            "AI analyzed vibration, temperature, and network patterns to detect anomalies. Result: " + data.prediction;
+    });
+}
+
+function simulate(){
+    fetch('/simulate')
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('vibration').value = data.vibration;
+        document.getElementById('temperature').value = data.temperature;
+        document.getElementById('pressure').value = data.pressure;
+        document.getElementById('voltage').value = data.voltage;
+        document.getElementById('current').value = data.current;
+        document.getElementById('rpm').value = data.rpm;
+        document.getElementById('network_delay').value = data.network_delay;
+        document.getElementById('device_id').value = data.device_id;
+        document.getElementById('sound').value = data.sound;
+        document.getElementById('humidity').value = data.humidity;
+
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        document.getElementById('ai_explanation').innerText =
+            "Simulated data processed. AI detected system behavior and classified status as: " + data.prediction;
+    });
+}
+</script>
+
+</body>
+</html> -->
+
+ <!-- <html>
+<head>
+    <title>SecurePredict Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            color: #38bdf8;
+        }
+
+        .main {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 70%;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+        }
+
+        .sidebar {
+            width: 30%;
+            background: #020617;
+            padding: 20px;
+            border-left: 2px solid #38bdf8;
+            border-radius: 12px;
+        }
+
+        .sidebar h3 {
+            color: #38bdf8;
+        }
+
+        #ai_explanation {
+            margin-top: 15px;
+            line-height: 1.5;
+            color: #cbd5f5;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        input {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #334155;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            background: #475569;
+            box-shadow: 0 0 5px #38bdf8;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            flex: 1;
+        }
+
+        button:first-child {
+            background: #22c55e;
+            color: white;
+        }
+
+        button:last-child {
+            background: #f59e0b;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+            transform: scale(1.03);
+        }
+
+        .output {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .prediction {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .cyber {
+            color: #f87171;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 13px;
+            margin-bottom: 3px;
+            display: block;
+            color: #94a3b8;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .graph-box {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .graph-box h3 {
+            margin-top: 0;
+            color: #38bdf8;
+        }
+
+        canvas {
+            width: 100% !important;
+            max-height: 320px;
+        }
+
+        @media (max-width: 900px) {
+            .main {
+                flex-direction: column;
+            }
+
+            .container,
+            .sidebar {
+                width: 100%;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>SecurePredict Dashboard</h2>
+
+<div class="main">
+
+    <div class="container">
+
+        <div class="grid">
+            <div class="field"><label>Vibration</label><input id="vibration"></div>
+            <div class="field"><label>Temperature</label><input id="temperature"></div>
+            <div class="field"><label>Pressure</label><input id="pressure"></div>
+            <div class="field"><label>Voltage</label><input id="voltage"></div>
+            <div class="field"><label>Current</label><input id="current"></div>
+            <div class="field"><label>RPM</label><input id="rpm"></div>
+            <div class="field"><label>Network Delay</label><input id="network_delay"></div>
+            <div class="field"><label>Device ID</label><input id="device_id"></div>
+            <div class="field"><label>Sound</label><input id="sound"></div>
+            <div class="field"><label>Humidity</label><input id="humidity"></div>
+        </div>
+
+        <div class="buttons">
+            <button onclick="predict()">Predict</button>
+            <button onclick="simulate()">Auto Simulate</button>
+        </div>
+
+        <div class="output">
+            <h3 class="prediction" id="prediction">Prediction: </h3>
+            <h3 class="cyber" id="cyber">Cyber Analysis: </h3>
+        </div>
+
+        <div class="graph-box">
+            <h3>Vibration Fluctuation Graph</h3>
+            <canvas id="vibrationChart"></canvas>
+        </div>
+
+    </div>
+
+    <div class="sidebar">
+        <h3>AI Explanation</h3>
+        <p id="ai_explanation">Waiting for analysis...</p>
+    </div>
+
+</div>
+
+<script>
+let vibrationLabels = [];
+let vibrationValues = [];
+
+const ctx = document.getElementById('vibrationChart').getContext('2d');
+
+const vibrationChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: vibrationLabels,
+        datasets: [{
+            label: 'Vibration',
+            data: vibrationValues,
+            borderColor: '#38bdf8',
+            backgroundColor: 'rgba(56, 189, 248, 0.2)',
+            borderWidth: 3,
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: '#22d3ee',
+            pointBorderColor: '#ffffff',
+            pointRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+            duration: 500
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: '#cbd5e1'
+                },
+                grid: {
+                    color: 'rgba(148, 163, 184, 0.15)'
+                }
+            },
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    color: '#cbd5e1'
+                },
+                grid: {
+                    color: 'rgba(148, 163, 184, 0.15)'
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                labels: {
+                    color: '#e2e8f0'
+                }
+            }
+        }
+    }
+});
+
+function updateVibrationGraph(vibrationValue) {
+    const currentTime = new Date().toLocaleTimeString();
+
+    vibrationLabels.push(currentTime);
+    vibrationValues.push(Number(vibrationValue));
+
+    if (vibrationLabels.length > 12) {
+        vibrationLabels.shift();
+        vibrationValues.shift();
+    }
+
+    vibrationChart.update();
+}
+
+function predict(){
+    fetch('/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            vibration: document.getElementById('vibration').value,
+            temperature: document.getElementById('temperature').value,
+            sound: document.getElementById('sound').value,
+            rpm: document.getElementById('rpm').value,
+            network_delay: document.getElementById('network_delay').value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const vibration = document.getElementById('vibration').value;
+
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        updateVibrationGraph(vibration);
+
+        document.getElementById('ai_explanation').innerText =
+            "Analyzed vibration, temperature, and network patterns to detect anomalies. Result: " + data.prediction;
+    });
+}
+
+function simulate(){
+    fetch('/simulate')
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('vibration').value = data.vibration;
+        document.getElementById('temperature').value = data.temperature;
+        document.getElementById('pressure').value = data.pressure;
+        document.getElementById('voltage').value = data.voltage;
+        document.getElementById('current').value = data.current;
+        document.getElementById('rpm').value = data.rpm;
+        document.getElementById('network_delay').value = data.network_delay;
+        document.getElementById('device_id').value = data.device_id;
+        document.getElementById('sound').value = data.sound;
+        document.getElementById('humidity').value = data.humidity;
+
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        updateVibrationGraph(data.vibration);
+
+        document.getElementById('ai_explanation').innerText =
+            "Simulated data processed. We have detected system behavior and classified status as: " + data.prediction;
+    });
+}
+</script>
+
+</body>
+</html>  -->
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>SecurePredict Dashboard</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            color: #38bdf8;
+        }
+
+        /* NEW LAYOUT */
+        .main {
+            display: flex;
+        }
+
+        .container {
+            width: 70%;
+            margin: auto;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+        }
+  
+        .status-safe {
+             border: 2px solid #22c55e;
+             box-shadow: 0 0 15px rgba(34, 197, 94, 0.6);
+             transition: 0.3s;
+        }
+
+        .status-risk {
+             border: 2px solid #ef4444;
+             box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+             transition: 0.3s;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 30%;
+            background: #020617;
+            padding: 20px;
+            border-left: 2px solid #38bdf8;
+        }
+
+        .sidebar h3 {
+            color: #38bdf8;
+        }
+
+        #ai_explanation {
+            margin-top: 15px;
+            line-height: 1.5;
+            color: #cbd5f5;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        input {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #334155;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            background: #475569;
+            box-shadow: 0 0 5px #38bdf8;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:first-child {
+            background: #22c55e;
+            color: white;
+        }
+
+        button:last-child {
+            background: #f59e0b;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+            transform: scale(1.05);
+        }
+
+        .output {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .prediction {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .cyber {
+            color: #f87171;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 13px;
+            margin-bottom: 3px;
+            display: block;
+            color: #94a3b8;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<h2>🔐 SecurePredict Dashboard</h2>
+
+<div class="main">
+
+    
+    <div class="container">
+
+        <div class="grid">
+
+            <div class="field"><label>Vibration</label><input id="vibration"></div>
+            <div class="field"><label>Temperature</label><input id="temperature"></div>
+            <div class="field"><label>Pressure</label><input id="pressure"></div>
+            <div class="field"><label>Voltage</label><input id="voltage"></div>
+            <div class="field"><label>Current</label><input id="current"></div>
+            <div class="field"><label>RPM</label><input id="rpm"></div>
+            <div class="field"><label>Network Delay</label><input id="network_delay"></div>
+            <div class="field"><label>Device ID</label><input id="device_id"></div>
+            <div class="field"><label>Sound</label><input id="sound"></div>
+            <div class="field"><label>Humidity</label><input id="humidity"></div>
+
+        </div>
+
+        <div class="buttons">
+            <button onclick="predict()">Predict</button>
+            <button onclick="simulate()">Auto Simulate</button>
+        </div>
+
+        <div class="output">
+            <h3 class="prediction" id="prediction">Prediction: </h3>
+            <h3 class="cyber" id="cyber">Cyber Analysis: </h3>
+        </div>
+
+    </div>
+
+    
+    <div class="sidebar">
+        <h3>🧠 AI Explanation</h3>
+        <p id="ai_explanation">Waiting for analysis...</p>
+    </div>
+
+</div>
+
+<script>
+function predict(){
+    fetch('/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            vibration: document.getElementById('vibration').value,
+            temperature: document.getElementById('temperature').value,
+            sound: document.getElementById('sound').value,
+            rpm: document.getElementById('rpm').value,
+            network_delay: document.getElementById('network_delay').value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        // AI explanation (simple example)
+        document.getElementById('ai_explanation').innerText =
+            "AI analyzed vibration, temperature, and network patterns to detect anomalies. Result: " + data.prediction;
+    });
+}
+
+function simulate(){
+    fetch('/simulate')
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('vibration').value = data.vibration;
+        document.getElementById('temperature').value = data.temperature;
+        document.getElementById('pressure').value = data.pressure;
+        document.getElementById('voltage').value = data.voltage;
+        document.getElementById('current').value = data.current;
+        document.getElementById('rpm').value = data.rpm;
+        document.getElementById('network_delay').value = data.network_delay;
+        document.getElementById('device_id').value = data.device_id;
+        document.getElementById('sound').value = data.sound;
+        document.getElementById('humidity').value = data.humidity;
+
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        document.getElementById('ai_explanation').innerText =
+            "Simulated data processed. AI detected system behavior and classified status as: " + data.prediction;
+    });
+}
+</script>
+
+</body>
+</html> -->
+
+<!-- <html>
+<head>
+    <title>SecurePredict Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            color: #38bdf8;
+        }
+
+        .main {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 70%;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+        }
+
+        .sidebar {
+            width: 30%;
+            background: #020617;
+            padding: 20px;
+            border-left: 2px solid #38bdf8;
+            border-radius: 12px;
+        }
+
+        .sidebar h3 {
+            color: #38bdf8;
+        }
+
+        #ai_explanation {
+            margin-top: 15px;
+            line-height: 1.5;
+            color: #cbd5f5;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        input {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #334155;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            background: #475569;
+            box-shadow: 0 0 5px #38bdf8;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            flex: 1;
+        }
+
+        button:first-child {
+            background: #22c55e;
+            color: white;
+        }
+
+        button:last-child {
+            background: #f59e0b;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+            transform: scale(1.03);
+        }
+
+        .output {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .prediction {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .cyber {
+            color: #f87171;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 13px;
+            margin-bottom: 3px;
+            display: block;
+            color: #94a3b8;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .graph-box {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .graph-box h3 {
+            margin-top: 0;
+            color: #38bdf8;
+        }
+
+        canvas {
+            width: 100% !important;
+            max-height: 320px;
+        }
+
+        @media (max-width: 900px) {
+            .main {
+                flex-direction: column;
+            }
+
+            .container,
+            .sidebar {
+                width: 100%;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>SecurePredict Dashboard</h2>
+
+<div class="main">
+
+    <div class="container">
+
+        <div class="grid">
+            <div class="field"><label>Vibration</label><input id="vibration"></div>
+            <div class="field"><label>Temperature</label><input id="temperature"></div>
+            <div class="field"><label>Pressure</label><input id="pressure"></div>
+            <div class="field"><label>Voltage</label><input id="voltage"></div>
+            <div class="field"><label>Current</label><input id="current"></div>
+            <div class="field"><label>RPM</label><input id="rpm"></div>
+            <div class="field"><label>Network Delay</label><input id="network_delay"></div>
+            <div class="field"><label>Device ID</label><input id="device_id"></div>
+            <div class="field"><label>Sound</label><input id="sound"></div>
+            <div class="field"><label>Humidity</label><input id="humidity"></div>
+        </div>
+
+        <div class="buttons">
+            <button onclick="predict()">Predict</button>
+            <button onclick="simulate()">Auto Simulate</button>
+        </div>
+
+        <div class="output">
+            <h3 class="prediction" id="prediction">Prediction: </h3>
+            <h3 class="cyber" id="cyber">Cyber Analysis: </h3>
+        </div>
+
+        <div class="graph-box">
+            <h3>Vibration Fluctuation Graph</h3>
+            <canvas id="vibrationChart"></canvas>
+        </div>
+
+    </div>
+
+    <div class="sidebar">
+        <h3>AI Explanation</h3>
+        <p id="ai_explanation">Waiting for analysis...</p>
+    </div>
+
+</div>
+
+<script>
+let vibrationLabels = [];
+let vibrationValues = [];
+
+const ctx = document.getElementById('vibrationChart').getContext('2d');
+
+const vibrationChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: vibrationLabels,
+        datasets: [{
+            label: 'Vibration',
+            data: vibrationValues,
+            borderColor: '#38bdf8',
+            backgroundColor: 'rgba(56, 189, 248, 0.2)',
+            borderWidth: 3,
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: '#22d3ee',
+            pointBorderColor: '#ffffff',
+            pointRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+            duration: 500
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: '#cbd5e1'
+                },
+                grid: {
+                    color: 'rgba(148, 163, 184, 0.15)'
+                }
+            },
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    color: '#cbd5e1'
+                },
+                grid: {
+                    color: 'rgba(148, 163, 184, 0.15)'
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                labels: {
+                    color: '#e2e8f0'
+                }
+            }
+        }
+    }
+});
+
+function updateVibrationGraph(vibrationValue) {
+    const currentTime = new Date().toLocaleTimeString();
+
+    vibrationLabels.push(currentTime);
+    vibrationValues.push(Number(vibrationValue));
+
+    if (vibrationLabels.length > 12) {
+        vibrationLabels.shift();
+        vibrationValues.shift();
+    }
+
+    vibrationChart.update();
+}
+
+function predict(){
+    fetch('/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            vibration: document.getElementById('vibration').value,
+            temperature: document.getElementById('temperature').value,
+            sound: document.getElementById('sound').value,
+            rpm: document.getElementById('rpm').value,
+            network_delay: document.getElementById('network_delay').value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const vibration = document.getElementById('vibration').value;
+
+       const statusBox = document.getElementById('statusBox');
+
+// remove previous classes
+statusBox.classList.remove('status-safe', 'status-risk');
+
+// check prediction
+if (data.prediction.toLowerCase().includes("normal")) {
+    statusBox.classList.add('status-safe');
+} else {
+    statusBox.classList.add('status-risk');
+}
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        updateVibrationGraph(vibration);
+
+        document.getElementById('ai_explanation').innerText =
+            "Analyzed vibration, temperature, and network patterns to detect anomalies. Result: " + data.prediction;
+    });
+}
+
+function simulate(){
+    fetch('/simulate')
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('vibration').value = data.vibration;
+        document.getElementById('temperature').value = data.temperature;
+        document.getElementById('pressure').value = data.pressure;
+        document.getElementById('voltage').value = data.voltage;
+        document.getElementById('current').value = data.current;
+        document.getElementById('rpm').value = data.rpm;
+        document.getElementById('network_delay').value = data.network_delay;
+        document.getElementById('device_id').value = data.device_id;
+        document.getElementById('sound').value = data.sound;
+        document.getElementById('humidity').value = data.humidity;
+
+        const statusBox = document.getElementById('statusBox');
+
+// remove previous classes
+statusBox.classList.remove('status-safe', 'status-risk');
+
+// check prediction
+if (data.prediction.toLowerCase().includes("normal")) {
+    statusBox.classList.add('status-safe');
+} else {
+    statusBox.classList.add('status-risk');
+}
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        updateVibrationGraph(data.vibration);
+
+        document.getElementById('ai_explanation').innerText =
+            "Simulated data processed. We have detected system behavior and classified status as: " + data.prediction;
+    });
+}
+</script>
+
+</body>
+</html> -->
+
+<!--
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecurePredict Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            color: #38bdf8;
+        }
+
+        .main {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 70%;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+        }
+
+        .sidebar {
+            width: 30%;
+            background: #020617;
+            padding: 20px;
+            border-left: 2px solid #38bdf8;
+            border-radius: 12px;
+        }
+
+        .sidebar h3 {
+            color: #38bdf8;
+            margin-top: 0;
+        }
+
+        #ai_explanation,
+        #prediction_report,
+        #cyber_report {
+            margin-top: 12px;
+            line-height: 1.6;
+            color: #cbd5f5;
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        input {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #334155;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            background: #475569;
+            box-shadow: 0 0 5px #38bdf8;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            flex: 1;
+        }
+
+        button:first-child {
+            background: #22c55e;
+            color: white;
+        }
+
+        button:last-child {
+            background: #f59e0b;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+            transform: scale(1.03);
+        }
+
+        .output {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .prediction {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .cyber {
+            color: #f87171;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 13px;
+            margin-bottom: 3px;
+            display: block;
+            color: #94a3b8;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .graph-box {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .graph-box h3 {
+            margin-top: 0;
+            color: #38bdf8;
+        }
+
+        .report-title {
+            margin-top: 18px;
+            margin-bottom: 8px;
+            color: #7dd3fc;
+            font-size: 15px;
+        }
+
+        canvas {
+            width: 100% !important;
+            max-height: 320px;
+        }
+
+        @media (max-width: 900px) {
+            .main {
+                flex-direction: column;
+            }
+
+            .container,
+            .sidebar {
+                width: 100%;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>SecurePredict Dashboard</h2>
+
+<div class="main">
+    <div class="container">
+        <div class="grid">
+            <div class="field"><label>Vibration</label><input id="vibration"></div>
+            <div class="field"><label>Temperature</label><input id="temperature"></div>
+            <div class="field"><label>Pressure</label><input id="pressure"></div>
+            <div class="field"><label>Voltage</label><input id="voltage"></div>
+            <div class="field"><label>Current</label><input id="current"></div>
+            <div class="field"><label>RPM</label><input id="rpm"></div>
+            <div class="field"><label>Network Delay</label><input id="network_delay"></div>
+            <div class="field"><label>Device ID</label><input id="device_id"></div>
+            <div class="field"><label>Sound</label><input id="sound"></div>
+            <div class="field"><label>Humidity</label><input id="humidity"></div>
+        </div>
+
+        <div class="buttons">
+            <button onclick="predict()">Predict</button>
+            <button onclick="simulate()">Auto Simulate</button>
+        </div>
+
+        <div class="output" id="statusbox">
+            <h3 class="prediction" id="prediction">Prediction: </h3>
+            <h3 class="cyber" id="cyber">Cyber Analysis: </h3>
+        </div>
+
+        <div class="graph-box">
+            <h3>Vibration Fluctuation Graph</h3>
+            <canvas id="vibrationChart"></canvas>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <h3>AI Explanation</h3>
+        <p id="ai_explanation">Waiting for analysis...</p>
+
+        <div class="report-title">Prediction Report</div>
+        <div id="prediction_report">Waiting for prediction report...</div>
+
+        <div class="report-title">Cybersecurity Report</div>
+        <div id="cyber_report">Waiting for cybersecurity report...</div>
+    </div>
+</div>
+
+<script>
+let vibrationLabels = [];
+let vibrationValues = [];
+
+const ctx = document.getElementById('vibrationChart').getContext('2d');
+
+const vibrationChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: vibrationLabels,
+        datasets: [{
+            label: 'Vibration',
+            data: vibrationValues,
+            borderColor: '#38bdf8',
+            backgroundColor: 'rgba(56, 189, 248, 0.2)',
+            borderWidth: 3,
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: '#22d3ee',
+            pointBorderColor: '#ffffff',
+            pointRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+            duration: 500
+        },
+        scales: {
+            x: {
+                ticks: { color: '#cbd5e1' },
+                grid: { color: 'rgba(148, 163, 184, 0.15)' }
+            },
+            y: {
+                beginAtZero: true,
+                ticks: { color: '#cbd5e1' },
+                grid: { color: 'rgba(148, 163, 184, 0.15)' }
+            }
+        },
+        plugins: {
+            legend: {
+                labels: { color: '#e2e8f0' }
+            }
+        }
+    }
+});
+
+function updateVibrationGraph(vibrationValue) {
+    const currentTime = new Date().toLocaleTimeString();
+
+    vibrationLabels.push(currentTime);
+    vibrationValues.push(Number(vibrationValue));
+
+    if (vibrationLabels.length > 12) {
+        vibrationLabels.shift();
+        vibrationValues.shift();
+    }
+
+    vibrationChart.update();
+}
+
+async function generateReports(predictionText, cyberText) {
+    try {
+        const response = await fetch('/generate_reports', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                prediction: predictionText,
+                cyber: cyberText
+            })
+        });
+
+        const data = await response.json();
+
+        document.getElementById('prediction_report').innerText =
+            data.prediction_report || 'Prediction report unavailable.';
+
+        document.getElementById('cyber_report').innerText =
+            data.cyber_report || 'Cybersecurity report unavailable.';
+    } catch (error) {
+        document.getElementById('prediction_report').innerText =
+            'Could not generate prediction report.';
+        document.getElementById('cyber_report').innerText =
+            'Could not generate cybersecurity report.';
+    }
+}
+
+function predict() {
+    fetch('/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            vibration: document.getElementById('vibration').value,
+            temperature: document.getElementById('temperature').value,
+            sound: document.getElementById('sound').value,
+            rpm: document.getElementById('rpm').value,
+            network_delay: document.getElementById('network_delay').value
+        })
+    })
+    .then(res => res.json())
+    .then(async data => {
+        const vibration = document.getElementById('vibration').value;
+
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        updateVibrationGraph(vibration);
+
+        document.getElementById('ai_explanation').innerText =
+            "AI analyzed vibration, temperature, and network patterns to detect anomalies. Result: " + data.prediction;
+
+        await generateReports(data.prediction, data.cyber);
+    });
+}
+
+function simulate() {
+    fetch('/simulate')
+    .then(res => res.json())
+    .then(async data => {
+        document.getElementById('vibration').value = data.vibration;
+        document.getElementById('temperature').value = data.temperature;
+        document.getElementById('pressure').value = data.pressure;
+        document.getElementById('voltage').value = data.voltage;
+        document.getElementById('current').value = data.current;
+        document.getElementById('rpm').value = data.rpm;
+        document.getElementById('network_delay').value = data.network_delay;
+        document.getElementById('device_id').value = data.device_id;
+        document.getElementById('sound').value = data.sound;
+        document.getElementById('humidity').value = data.humidity;
+
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        updateVibrationGraph(data.vibration);
+
+        document.getElementById('ai_explanation').innerText =
+            "Simulated data processed. AI detected system behavior and classified status as: " + data.prediction;
+
+        await generateReports(data.prediction, data.cyber);
+    });
+}
+</script>
+
+</body>
+</html>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>SecurePredict Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            color: #38bdf8;
+        }
+
+        .main {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 70%;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+        }
+
+        .sidebar {
+            width: 30%;
+            background: #020617;
+            padding: 20px;
+            border-left: 2px solid #38bdf8;
+            border-radius: 12px;
+        }
+
+        .sidebar h3 {
+            color: #38bdf8;
+            margin-top: 0;
+        }
+
+        #ai_explanation,
+        #prediction_report,
+        #cyber_report {
+            margin-top: 12px;
+            line-height: 1.6;
+            color: #cbd5f5;
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        input {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #334155;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            background: #475569;
+            box-shadow: 0 0 5px #38bdf8;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            flex: 1;
+        }
+
+        button:first-child {
+            background: #22c55e;
+            color: white;
+        }
+
+        button:last-child {
+            background: #f59e0b;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+            transform: scale(1.03);
+        }
+
+        .output {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .prediction {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .cyber {
+            color: #f87171;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 13px;
+            margin-bottom: 3px;
+            display: block;
+            color: #94a3b8;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .graph-box {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .graph-box h3 {
+            margin-top: 0;
+            color: #38bdf8;
+        }
+
+        .report-title {
+            margin-top: 18px;
+            margin-bottom: 8px;
+            color: #7dd3fc;
+            font-size: 15px;
+        }
+
+        canvas {
+            width: 100% !important;
+            max-height: 320px;
+        }
+
+        @media (max-width: 900px) {
+            .main {
+                flex-direction: column;
+            }
+
+            .container,
+            .sidebar {
+                width: 100%;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>SecurePredict Dashboard</h2>
+
+<div class="main">
+    <div class="container">
+        <div class="grid">
+            <div class="field"><label>Vibration</label><input id="vibration"></div>
+            <div class="field"><label>Temperature</label><input id="temperature"></div>
+            <div class="field"><label>Pressure</label><input id="pressure"></div>
+            <div class="field"><label>Voltage</label><input id="voltage"></div>
+            <div class="field"><label>Current</label><input id="current"></div>
+            <div class="field"><label>RPM</label><input id="rpm"></div>
+            <div class="field"><label>Network Delay</label><input id="network_delay"></div>
+            <div class="field"><label>Device ID</label><input id="device_id"></div>
+            <div class="field"><label>Sound</label><input id="sound"></div>
+            <div class="field"><label>Humidity</label><input id="humidity"></div>
+        </div>
+
+        <div class="buttons">
+            <button onclick="predict()">Predict</button>
+            <button onclick="simulate()">Auto Simulate</button>
+        </div>
+
+        <div class="output">
+            <h3 class="prediction" id="prediction">Prediction: </h3>
+            <h3 class="cyber" id="cyber">Cyber Analysis: </h3>
+        </div>
+
+        <div class="graph-box">
+            <h3>Vibration Fluctuation Graph</h3>
+            <canvas id="vibrationChart"></canvas>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <h3>AI Explanation</h3>
+        <p id="ai_explanation">Waiting for analysis...</p>
+
+        <div class="report-title">Prediction Report</div>
+        <div id="prediction_report">Waiting for prediction report...</div>
+
+        <div class="report-title">Cybersecurity Report</div>
+        <div id="cyber_report">Waiting for cybersecurity report...</div>
+    </div>
+</div>
+
+<script>
+let vibrationLabels = [];
+let vibrationValues = [];
+
+const ctx = document.getElementById('vibrationChart').getContext('2d');
+
+const vibrationChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: vibrationLabels,
+        datasets: [{
+            label: 'Vibration',
+            data: vibrationValues,
+            borderColor: '#38bdf8',
+            backgroundColor: 'rgba(56, 189, 248, 0.2)',
+            borderWidth: 3,
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: '#22d3ee',
+            pointBorderColor: '#ffffff',
+            pointRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+            duration: 500
+        },
+        scales: {
+            x: {
+                ticks: { color: '#cbd5e1' },
+                grid: { color: 'rgba(148, 163, 184, 0.15)' }
+            },
+            y: {
+                beginAtZero: true,
+                ticks: { color: '#cbd5e1' },
+                grid: { color: 'rgba(148, 163, 184, 0.15)' }
+            }
+        },
+        plugins: {
+            legend: {
+                labels: { color: '#e2e8f0' }
+            }
+        }
+    }
+});
+
+function updateVibrationGraph(vibrationValue) {
+    const currentTime = new Date().toLocaleTimeString();
+
+    vibrationLabels.push(currentTime);
+    vibrationValues.push(Number(vibrationValue));
+
+    if (vibrationLabels.length > 12) {
+        vibrationLabels.shift();
+        vibrationValues.shift();
+    }
+
+    vibrationChart.update();
+}
+
+async function generateReports(predictionText, cyberText) {
+    try {
+        const response = await fetch('/generate_reports', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                prediction: predictionText,
+                cyber: cyberText
+            })
+        });
+
+        const data = await response.json();
+
+        document.getElementById('prediction_report').innerText =
+            data.prediction_report || 'Prediction report unavailable.';
+
+        document.getElementById('cyber_report').innerText =
+            data.cyber_report || 'Cybersecurity report unavailable.';
+    } catch (error) {
+        document.getElementById('prediction_report').innerText =
+            'Could not generate prediction report.';
+        document.getElementById('cyber_report').innerText =
+            'Could not generate cybersecurity report.';
+    }
+}
+
+function predict() {
+    fetch('/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            vibration: document.getElementById('vibration').value,
+            temperature: document.getElementById('temperature').value,
+            sound: document.getElementById('sound').value,
+            rpm: document.getElementById('rpm').value,
+            network_delay: document.getElementById('network_delay').value
+        })
+    })
+    .then(res => res.json())
+    .then(async data => {
+        const vibration = document.getElementById('vibration').value;
+
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        updateVibrationGraph(vibration);
+
+        document.getElementById('ai_explanation').innerText =
+            "AI analyzed vibration, temperature, and network patterns to detect anomalies. Result: " + data.prediction;
+
+        await generateReports(data.prediction, data.cyber);
+    });
+}
+
+function simulate() {
+    fetch('/simulate')
+    .then(res => res.json())
+    .then(async data => {
+        document.getElementById('vibration').value = data.vibration;
+        document.getElementById('temperature').value = data.temperature;
+        document.getElementById('pressure').value = data.pressure;
+        document.getElementById('voltage').value = data.voltage;
+        document.getElementById('current').value = data.current;
+        document.getElementById('rpm').value = data.rpm;
+        document.getElementById('network_delay').value = data.network_delay;
+        document.getElementById('device_id').value = data.device_id;
+        document.getElementById('sound').value = data.sound;
+        document.getElementById('humidity').value = data.humidity;
+
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        updateVibrationGraph(data.vibration);
+
+        document.getElementById('ai_explanation').innerText =
+            "Simulated data processed. AI detected system behavior and classified status as: " + data.prediction;
+
+        await generateReports(data.prediction, data.cyber);
+    });
+}
+</script>
+
+</body>
+</html> -->
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>SecurePredict Dashboard</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            color: #38bdf8;
+        }
+
+        /* NEW LAYOUT */
+        .main {
+            display: flex;
+        }
+
+        .container {
+            width: 70%;
+            margin: auto;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+        }
+  
+        .status-safe {
+             border: 2px solid #22c55e;
+             box-shadow: 0 0 15px rgba(34, 197, 94, 0.6);
+             transition: 0.3s;
+        }
+
+        .status-risk {
+             border: 2px solid #ef4444;
+             box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+             transition: 0.3s;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 30%;
+            background: #020617;
+            padding: 20px;
+            border-left: 2px solid #38bdf8;
+        }
+
+        .sidebar h3 {
+            color: #38bdf8;
+        }
+
+        #ai_explanation {
+            margin-top: 15px;
+            line-height: 1.5;
+            color: #cbd5f5;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        input {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #334155;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            background: #475569;
+            box-shadow: 0 0 5px #38bdf8;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:first-child {
+            background: #22c55e;
+            color: white;
+        }
+
+        button:last-child {
+            background: #f59e0b;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+            transform: scale(1.05);
+        }
+
+        .output {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .prediction {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .cyber {
+            color: #f87171;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 13px;
+            margin-bottom: 3px;
+            display: block;
+            color: #94a3b8;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<h2>🔐 SecurePredict Dashboard</h2>
+
+<div class="main">
+
+    
+    <div class="container">
+
+        <div class="grid">
+
+            <div class="field"><label>Vibration</label><input id="vibration"></div>
+            <div class="field"><label>Temperature</label><input id="temperature"></div>
+            <div class="field"><label>Pressure</label><input id="pressure"></div>
+            <div class="field"><label>Voltage</label><input id="voltage"></div>
+            <div class="field"><label>Current</label><input id="current"></div>
+            <div class="field"><label>RPM</label><input id="rpm"></div>
+            <div class="field"><label>Network Delay</label><input id="network_delay"></div>
+            <div class="field"><label>Device ID</label><input id="device_id"></div>
+            <div class="field"><label>Sound</label><input id="sound"></div>
+            <div class="field"><label>Humidity</label><input id="humidity"></div>
+
+        </div>
+
+        <div class="buttons">
+            <button onclick="predict()">Predict</button>
+            <button onclick="simulate()">Auto Simulate</button>
+        </div>
+
+        <div class="output">
+            <h3 class="prediction" id="prediction">Prediction: </h3>
+            <h3 class="cyber" id="cyber">Cyber Analysis: </h3>
+        </div>
+
+    </div>
+
+    
+    <div class="sidebar">
+        <h3>🧠 AI Explanation</h3>
+        <p id="ai_explanation">Waiting for analysis...</p>
+    </div>
+
+</div>
+
+<script>
+function predict(){
+    fetch('/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            vibration: document.getElementById('vibration').value,
+            temperature: document.getElementById('temperature').value,
+            sound: document.getElementById('sound').value,
+            rpm: document.getElementById('rpm').value,
+            network_delay: document.getElementById('network_delay').value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        // AI explanation (simple example)
+        document.getElementById('ai_explanation').innerText =
+            "AI analyzed vibration, temperature, and network patterns to detect anomalies. Result: " + data.prediction;
+    });
+}
+
+function simulate(){
+    fetch('/simulate')
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('vibration').value = data.vibration;
+        document.getElementById('temperature').value = data.temperature;
+        document.getElementById('pressure').value = data.pressure;
+        document.getElementById('voltage').value = data.voltage;
+        document.getElementById('current').value = data.current;
+        document.getElementById('rpm').value = data.rpm;
+        document.getElementById('network_delay').value = data.network_delay;
+        document.getElementById('device_id').value = data.device_id;
+        document.getElementById('sound').value = data.sound;
+        document.getElementById('humidity').value = data.humidity;
+
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        document.getElementById('ai_explanation').innerText =
+            "Simulated data processed. AI detected system behavior and classified status as: " + data.prediction;
+    });
+}
+</script>
+
+</body>
+</html> -->
+
+<!-- <html>
+<head>
+    <title>SecurePredict Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            color: #38bdf8;
+        }
+
+        .main {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 70%;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+        }
+
+        .sidebar {
+            width: 30%;
+            background: #020617;
+            padding: 20px;
+            border-left: 2px solid #38bdf8;
+            border-radius: 12px;
+        }
+
+        .sidebar h3 {
+            color: #38bdf8;
+        }
+
+        #ai_explanation {
+            margin-top: 15px;
+            line-height: 1.5;
+            color: #cbd5f5;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        input {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #334155;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            background: #475569;
+            box-shadow: 0 0 5px #38bdf8;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            flex: 1;
+        }
+
+        button:first-child {
+            background: #22c55e;
+            color: white;
+        }
+
+        button:last-child {
+            background: #f59e0b;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+            transform: scale(1.03);
+        }
+
+        .output {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .prediction {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .cyber {
+            color: #f87171;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 13px;
+            margin-bottom: 3px;
+            display: block;
+            color: #94a3b8;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .graph-box {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .graph-box h3 {
+            margin-top: 0;
+            color: #38bdf8;
+        }
+
+        canvas {
+            width: 100% !important;
+            max-height: 320px;
+        }
+
+        @media (max-width: 900px) {
+            .main {
+                flex-direction: column;
+            }
+
+            .container,
+            .sidebar {
+                width: 100%;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>SecurePredict Dashboard</h2>
+
+<div class="main">
+
+    <div class="container">
+
+        <div class="grid">
+            <div class="field"><label>Vibration</label><input id="vibration"></div>
+            <div class="field"><label>Temperature</label><input id="temperature"></div>
+            <div class="field"><label>Pressure</label><input id="pressure"></div>
+            <div class="field"><label>Voltage</label><input id="voltage"></div>
+            <div class="field"><label>Current</label><input id="current"></div>
+            <div class="field"><label>RPM</label><input id="rpm"></div>
+            <div class="field"><label>Network Delay</label><input id="network_delay"></div>
+            <div class="field"><label>Device ID</label><input id="device_id"></div>
+            <div class="field"><label>Sound</label><input id="sound"></div>
+            <div class="field"><label>Humidity</label><input id="humidity"></div>
+        </div>
+
+        <div class="buttons">
+            <button onclick="predict()">Predict</button>
+            <button onclick="simulate()">Auto Simulate</button>
+        </div>
+
+        <div class="output">
+            <h3 class="prediction" id="prediction">Prediction: </h3>
+            <h3 class="cyber" id="cyber">Cyber Analysis: </h3>
+        </div>
+
+        <div class="graph-box">
+            <h3>Vibration Fluctuation Graph</h3>
+            <canvas id="vibrationChart"></canvas>
+        </div>
+
+    </div>
+
+    <div class="sidebar">
+        <h3>AI Explanation</h3>
+        <p id="ai_explanation">Waiting for analysis...</p>
+    </div>
+
+</div>
+
+<script>
+let vibrationLabels = [];
+let vibrationValues = [];
+
+const ctx = document.getElementById('vibrationChart').getContext('2d');
+
+const vibrationChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: vibrationLabels,
+        datasets: [{
+            label: 'Vibration',
+            data: vibrationValues,
+            borderColor: '#38bdf8',
+            backgroundColor: 'rgba(56, 189, 248, 0.2)',
+            borderWidth: 3,
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: '#22d3ee',
+            pointBorderColor: '#ffffff',
+            pointRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+            duration: 500
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: '#cbd5e1'
+                },
+                grid: {
+                    color: 'rgba(148, 163, 184, 0.15)'
+                }
+            },
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    color: '#cbd5e1'
+                },
+                grid: {
+                    color: 'rgba(148, 163, 184, 0.15)'
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                labels: {
+                    color: '#e2e8f0'
+                }
+            }
+        }
+    }
+});
+
+function updateVibrationGraph(vibrationValue) {
+    const currentTime = new Date().toLocaleTimeString();
+
+    vibrationLabels.push(currentTime);
+    vibrationValues.push(Number(vibrationValue));
+
+    if (vibrationLabels.length > 12) {
+        vibrationLabels.shift();
+        vibrationValues.shift();
+    }
+
+    vibrationChart.update();
+}
+
+function predict(){
+    fetch('/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            vibration: document.getElementById('vibration').value,
+            temperature: document.getElementById('temperature').value,
+            sound: document.getElementById('sound').value,
+            rpm: document.getElementById('rpm').value,
+            network_delay: document.getElementById('network_delay').value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const vibration = document.getElementById('vibration').value;
+
+       const statusBox = document.getElementById('statusBox');
+
+// remove previous classes
+statusBox.classList.remove('status-safe', 'status-risk');
+
+// check prediction
+if (data.prediction.toLowerCase().includes("normal")) {
+    statusBox.classList.add('status-safe');
+} else {
+    statusBox.classList.add('status-risk');
+}
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        updateVibrationGraph(vibration);
+
+        document.getElementById('ai_explanation').innerText =
+            "Analyzed vibration, temperature, and network patterns to detect anomalies. Result: " + data.prediction;
+    });
+}
+
+function simulate(){
+    fetch('/simulate')
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('vibration').value = data.vibration;
+        document.getElementById('temperature').value = data.temperature;
+        document.getElementById('pressure').value = data.pressure;
+        document.getElementById('voltage').value = data.voltage;
+        document.getElementById('current').value = data.current;
+        document.getElementById('rpm').value = data.rpm;
+        document.getElementById('network_delay').value = data.network_delay;
+        document.getElementById('device_id').value = data.device_id;
+        document.getElementById('sound').value = data.sound;
+        document.getElementById('humidity').value = data.humidity;
+
+        const statusBox = document.getElementById('statusBox');
+
+// remove previous classes
+statusBox.classList.remove('status-safe', 'status-risk');
+
+// check prediction
+if (data.prediction.toLowerCase().includes("normal")) {
+    statusBox.classList.add('status-safe');
+} else {
+    statusBox.classList.add('status-risk');
+}
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        updateVibrationGraph(data.vibration);
+
+        document.getElementById('ai_explanation').innerText =
+            "Simulated data processed. We have detected system behavior and classified status as: " + data.prediction;
+    });
+}
+</script>
+
+</body>
+</html> -->
+
+<!--
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecurePredict Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            color: #38bdf8;
+        }
+
+        .main {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 70%;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+        }
+
+        .sidebar {
+            width: 30%;
+            background: #020617;
+            padding: 20px;
+            border-left: 2px solid #38bdf8;
+            border-radius: 12px;
+        }
+
+        .sidebar h3 {
+            color: #38bdf8;
+            margin-top: 0;
+        }
+
+        #ai_explanation,
+        #prediction_report,
+        #cyber_report {
+            margin-top: 12px;
+            line-height: 1.6;
+            color: #cbd5f5;
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        input {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #334155;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            background: #475569;
+            box-shadow: 0 0 5px #38bdf8;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            flex: 1;
+        }
+
+        button:first-child {
+            background: #22c55e;
+            color: white;
+        }
+
+        button:last-child {
+            background: #f59e0b;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+            transform: scale(1.03);
+        }
+
+        .output {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .prediction {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .cyber {
+            color: #f87171;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 13px;
+            margin-bottom: 3px;
+            display: block;
+            color: #94a3b8;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .graph-box {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .graph-box h3 {
+            margin-top: 0;
+            color: #38bdf8;
+        }
+
+        .report-title {
+            margin-top: 18px;
+            margin-bottom: 8px;
+            color: #7dd3fc;
+            font-size: 15px;
+        }
+
+        canvas {
+            width: 100% !important;
+            max-height: 320px;
+        }
+
+        @media (max-width: 900px) {
+            .main {
+                flex-direction: column;
+            }
+
+            .container,
+            .sidebar {
+                width: 100%;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>SecurePredict Dashboard</h2>
+
+<div class="main">
+    <div class="container">
+        <div class="grid">
+            <div class="field"><label>Vibration</label><input id="vibration"></div>
+            <div class="field"><label>Temperature</label><input id="temperature"></div>
+            <div class="field"><label>Pressure</label><input id="pressure"></div>
+            <div class="field"><label>Voltage</label><input id="voltage"></div>
+            <div class="field"><label>Current</label><input id="current"></div>
+            <div class="field"><label>RPM</label><input id="rpm"></div>
+            <div class="field"><label>Network Delay</label><input id="network_delay"></div>
+            <div class="field"><label>Device ID</label><input id="device_id"></div>
+            <div class="field"><label>Sound</label><input id="sound"></div>
+            <div class="field"><label>Humidity</label><input id="humidity"></div>
+        </div>
+
+        <div class="buttons">
+            <button onclick="predict()">Predict</button>
+            <button onclick="simulate()">Auto Simulate</button>
+        </div>
+
+        <div class="output" id="statusbox">
+            <h3 class="prediction" id="prediction">Prediction: </h3>
+            <h3 class="cyber" id="cyber">Cyber Analysis: </h3>
+        </div>
+
+        <div class="graph-box">
+            <h3>Vibration Fluctuation Graph</h3>
+            <canvas id="vibrationChart"></canvas>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <h3>AI Explanation</h3>
+        <p id="ai_explanation">Waiting for analysis...</p>
+
+        <div class="report-title">Prediction Report</div>
+        <div id="prediction_report">Waiting for prediction report...</div>
+
+        <div class="report-title">Cybersecurity Report</div>
+        <div id="cyber_report">Waiting for cybersecurity report...</div>
+    </div>
+</div>
+
+<script>
+let vibrationLabels = [];
+let vibrationValues = [];
+
+const ctx = document.getElementById('vibrationChart').getContext('2d');
+
+const vibrationChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: vibrationLabels,
+        datasets: [{
+            label: 'Vibration',
+            data: vibrationValues,
+            borderColor: '#38bdf8',
+            backgroundColor: 'rgba(56, 189, 248, 0.2)',
+            borderWidth: 3,
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: '#22d3ee',
+            pointBorderColor: '#ffffff',
+            pointRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+            duration: 500
+        },
+        scales: {
+            x: {
+                ticks: { color: '#cbd5e1' },
+                grid: { color: 'rgba(148, 163, 184, 0.15)' }
+            },
+            y: {
+                beginAtZero: true,
+                ticks: { color: '#cbd5e1' },
+                grid: { color: 'rgba(148, 163, 184, 0.15)' }
+            }
+        },
+        plugins: {
+            legend: {
+                labels: { color: '#e2e8f0' }
+            }
+        }
+    }
+});
+
+function updateVibrationGraph(vibrationValue) {
+    const currentTime = new Date().toLocaleTimeString();
+
+    vibrationLabels.push(currentTime);
+    vibrationValues.push(Number(vibrationValue));
+
+    if (vibrationLabels.length > 12) {
+        vibrationLabels.shift();
+        vibrationValues.shift();
+    }
+
+    vibrationChart.update();
+}
+
+async function generateReports(predictionText, cyberText) {
+    try {
+        const response = await fetch('/generate_reports', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                prediction: predictionText,
+                cyber: cyberText
+            })
+        });
+
+        const data = await response.json();
+
+        document.getElementById('prediction_report').innerText =
+            data.prediction_report || 'Prediction report unavailable.';
+
+        document.getElementById('cyber_report').innerText =
+            data.cyber_report || 'Cybersecurity report unavailable.';
+    } catch (error) {
+        document.getElementById('prediction_report').innerText =
+            'Could not generate prediction report.';
+        document.getElementById('cyber_report').innerText =
+            'Could not generate cybersecurity report.';
+    }
+}
+
+function predict() {
+    fetch('/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            vibration: document.getElementById('vibration').value,
+            temperature: document.getElementById('temperature').value,
+            sound: document.getElementById('sound').value,
+            rpm: document.getElementById('rpm').value,
+            network_delay: document.getElementById('network_delay').value
+        })
+    })
+    .then(res => res.json())
+    .then(async data => {
+        const vibration = document.getElementById('vibration').value;
+
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        updateVibrationGraph(vibration);
+
+        document.getElementById('ai_explanation').innerText =
+            "AI analyzed vibration, temperature, and network patterns to detect anomalies. Result: " + data.prediction;
+
+        await generateReports(data.prediction, data.cyber);
+    });
+}
+
+function simulate() {
+    fetch('/simulate')
+    .then(res => res.json())
+    .then(async data => {
+        document.getElementById('vibration').value = data.vibration;
+        document.getElementById('temperature').value = data.temperature;
+        document.getElementById('pressure').value = data.pressure;
+        document.getElementById('voltage').value = data.voltage;
+        document.getElementById('current').value = data.current;
+        document.getElementById('rpm').value = data.rpm;
+        document.getElementById('network_delay').value = data.network_delay;
+        document.getElementById('device_id').value = data.device_id;
+        document.getElementById('sound').value = data.sound;
+        document.getElementById('humidity').value = data.humidity;
+
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        updateVibrationGraph(data.vibration);
+
+        document.getElementById('ai_explanation').innerText =
+            "Simulated data processed. AI detected system behavior and classified status as: " + data.prediction;
+
+        await generateReports(data.prediction, data.cyber);
+    });
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecurePredict Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            color: #38bdf8;
+        }
+
+        .main {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 70%;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+        }
+
+        .sidebar {
+            width: 30%;
+            background: #020617;
+            padding: 20px;
+            border-left: 2px solid #38bdf8;
+            border-radius: 12px;
+        }
+
+        .sidebar h3 {
+            color: #38bdf8;
+        }
+
+        #ai_explanation {
+            margin-top: 15px;
+            line-height: 1.5;
+            color: #cbd5f5;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        input {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #334155;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            background: #475569;
+            box-shadow: 0 0 5px #38bdf8;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            flex: 1;
+        }
+
+        button:first-child {
+            background: #22c55e;
+            color: white;
+        }
+
+        button:last-child {
+            background: #f59e0b;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+            transform: scale(1.03);
+        }
+
+        .output {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .prediction {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .cyber {
+            color: #f87171;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 13px;
+            margin-bottom: 3px;
+            display: block;
+            color: #94a3b8;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .graph-box {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #020617;
+        }
+
+        .graph-box h3 {
+            margin-top: 0;
+            color: #38bdf8;
+        }
+
+        canvas {
+            width: 100% !important;
+            max-height: 320px;
+        }
+
+        @media (max-width: 900px) {
+            .main {
+                flex-direction: column;
+            }
+
+            .container,
+            .sidebar {
+                width: 100%;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>SecurePredict Dashboard</h2>
+
+<div class="main">
+
+    <div class="container">
+
+        <div class="grid">
+            <div class="field"><label>Vibration</label><input id="vibration"></div>
+            <div class="field"><label>Temperature</label><input id="temperature"></div>
+            <div class="field"><label>Pressure</label><input id="pressure"></div>
+            <div class="field"><label>Voltage</label><input id="voltage"></div>
+            <div class="field"><label>Current</label><input id="current"></div>
+            <div class="field"><label>RPM</label><input id="rpm"></div>
+            <div class="field"><label>Network Delay</label><input id="network_delay"></div>
+            <div class="field"><label>Device ID</label><input id="device_id"></div>
+            <div class="field"><label>Sound</label><input id="sound"></div>
+            <div class="field"><label>Humidity</label><input id="humidity"></div>
+        </div>
+
+        <div class="buttons">
+            <button onclick="predict()">Predict</button>
+            <button onclick="simulate()">Auto Simulate</button>
+        </div>
+
+        <div class="output">
+            <h3 class="prediction" id="prediction">Prediction: </h3>
+            <h3 class="cyber" id="cyber">Cyber Analysis: </h3>
+        </div>
+
+        <div class="graph-box">
+            <h3>Vibration Fluctuation Graph</h3>
+            <canvas id="vibrationChart"></canvas>
+        </div>
+
+    </div>
+
+    <div class="sidebar">
+        <h3>Explanation</h3>
+        <p id="ai_explanation">Waiting for analysis...</p>
+    </div>
+
+</div>
+
+<script>
+let vibrationLabels = [];
+let vibrationValues = [];
+
+const ctx = document.getElementById('vibrationChart').getContext('2d');
+
+const vibrationChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: vibrationLabels,
+        datasets: [{
+            label: 'Vibration',
+            data: vibrationValues,
+            borderColor: '#38bdf8',
+            backgroundColor: 'rgba(56, 189, 248, 0.2)',
+            borderWidth: 3,
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: '#22d3ee',
+            pointBorderColor: '#ffffff',
+            pointRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+            duration: 500
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: '#cbd5e1'
+                },
+                grid: {
+                    color: 'rgba(148, 163, 184, 0.15)'
+                }
+            },
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    color: '#cbd5e1'
+                },
+                grid: {
+                    color: 'rgba(148, 163, 184, 0.15)'
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                labels: {
+                    color: '#e2e8f0'
+                }
+            }
+        }
+    }
+});
+
+function updateVibrationGraph(vibrationValue) {
+    const currentTime = new Date().toLocaleTimeString();
+
+    vibrationLabels.push(currentTime);
+    vibrationValues.push(Number(vibrationValue));
+
+    if (vibrationLabels.length > 12) {
+        vibrationLabels.shift();
+        vibrationValues.shift();
+    }
+
+    vibrationChart.update();
+}
+
+function predict(){
+    fetch('/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            vibration: document.getElementById('vibration').value,
+            temperature: document.getElementById('temperature').value,
+            sound: document.getElementById('sound').value,
+            rpm: document.getElementById('rpm').value,
+            network_delay: document.getElementById('network_delay').value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const vibration = document.getElementById('vibration').value;
+
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        updateVibrationGraph(vibration);
+
+        document.getElementById('ai_explanation').innerText =
+            "AI analyzed vibration, temperature, and network patterns to detect anomalies. Result: " + data.prediction;
+    });
+}
+
+function simulate(){
+    fetch('/simulate')
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('vibration').value = data.vibration;
+        document.getElementById('temperature').value = data.temperature;
+        document.getElementById('pressure').value = data.pressure;
+        document.getElementById('voltage').value = data.voltage;
+        document.getElementById('current').value = data.current;
+        document.getElementById('rpm').value = data.rpm;
+        document.getElementById('network_delay').value = data.network_delay;
+        document.getElementById('device_id').value = data.device_id;
+        document.getElementById('sound').value = data.sound;
+        document.getElementById('humidity').value = data.humidity;
+
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+
+        updateVibrationGraph(data.vibration);
+
+        document.getElementById('ai_explanation').innerText =
+            "Simulated data processed. AI detected system behavior and classified status as: " + data.prediction;
+    });
+}
+</script>
+
+</body>
+</html>
