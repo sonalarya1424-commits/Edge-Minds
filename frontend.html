@@ -2981,6 +2981,7 @@ function simulate() {
             text-align: center;
             padding: 20px;
             color: #38bdf8;
+            margin: 0;
         }
 
         .main {
@@ -3004,16 +3005,19 @@ function simulate() {
             padding: 20px;
             border-left: 2px solid #38bdf8;
             border-radius: 12px;
+            overflow-y: auto;
         }
 
         .sidebar h3 {
             color: #38bdf8;
+            margin-top: 0;
         }
 
         #ai_explanation {
             margin-top: 15px;
-            line-height: 1.5;
+            line-height: 1.6;
             color: #cbd5f5;
+            white-space: pre-wrap;
         }
 
         .grid {
@@ -3039,9 +3043,8 @@ function simulate() {
         }
 
         .buttons {
-            margin-top: 20px;
+            margin-top: 25px;
             display: flex;
-            justify-content: space-between;
             gap: 12px;
         }
 
@@ -3055,24 +3058,22 @@ function simulate() {
             flex: 1;
         }
 
-        button:first-child {
-            background: #22c55e;
-            color: white;
-        }
-
-        button:last-child {
-            background: #f59e0b;
-            color: white;
-        }
-
         button:hover {
-            opacity: 0.85;
+            opacity: 0.9;
             transform: scale(1.03);
+        }
+
+        .btn-predict { background: #22c55e; color: white; }
+        .btn-simulate { background: #f59e0b; color: white; }
+        .btn-report { 
+            background: #8b5cf6; 
+            color: white; 
+            margin-top: 10px;
         }
 
         .output {
             margin-top: 25px;
-            padding: 15px;
+            padding: 18px;
             border-radius: 10px;
             background: #020617;
         }
@@ -3080,16 +3081,18 @@ function simulate() {
         .prediction {
             color: #4ade80;
             font-weight: bold;
+            font-size: 18px;
         }
 
         .cyber {
             color: #f87171;
             font-weight: bold;
+            font-size: 18px;
         }
 
         label {
             font-size: 13px;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
             display: block;
             color: #94a3b8;
         }
@@ -3100,7 +3103,7 @@ function simulate() {
         }
 
         .graph-box {
-            margin-top: 25px;
+            margin-top: 30px;
             padding: 20px;
             border-radius: 10px;
             background: #020617;
@@ -3120,12 +3123,9 @@ function simulate() {
             .main {
                 flex-direction: column;
             }
-
-            .container,
-            .sidebar {
+            .container, .sidebar {
                 width: 100%;
             }
-
             .grid {
                 grid-template-columns: 1fr;
             }
@@ -3142,26 +3142,28 @@ function simulate() {
     <div class="container">
 
         <div class="grid">
-            <div class="field"><label>Vibration</label><input id="vibration"></div>
-            <div class="field"><label>Temperature</label><input id="temperature"></div>
-            <div class="field"><label>Pressure</label><input id="pressure"></div>
-            <div class="field"><label>Voltage</label><input id="voltage"></div>
-            <div class="field"><label>Current</label><input id="current"></div>
-            <div class="field"><label>RPM</label><input id="rpm"></div>
-            <div class="field"><label>Network Delay</label><input id="network_delay"></div>
-            <div class="field"><label>Device ID</label><input id="device_id"></div>
-            <div class="field"><label>Sound</label><input id="sound"></div>
-            <div class="field"><label>Humidity</label><input id="humidity"></div>
+            <div class="field"><label>Vibration (0/1)</label><input id="vibration" value="0"></div>
+            <div class="field"><label>Temperature (°C)</label><input id="temperature" value="42"></div>
+            <div class="field"><label>Pressure</label><input id="pressure" value="5"></div>
+            <div class="field"><label>Voltage</label><input id="voltage" value="220"></div>
+            <div class="field"><label>Current</label><input id="current" value="2.3"></div>
+            <div class="field"><label>RPM</label><input id="rpm" value="1450"></div>
+            <div class="field"><label>Network Delay (ms)</label><input id="network_delay" value="35"></div>
+            <div class="field"><label>Device ID</label><input id="device_id" value="3"></div>
+            <div class="field"><label>Sound</label><input id="sound" value="520"></div>
+            <div class="field"><label>Humidity (%)</label><input id="humidity" value="55"></div>
         </div>
 
         <div class="buttons">
-            <button onclick="predict()">Predict</button>
-            <button onclick="simulate()">Auto Simulate</button>
+            <button class="btn-predict" onclick="predict()">Predict</button>
+            <button class="btn-simulate" onclick="simulate()">Auto Simulate</button>
         </div>
 
+        <button class="btn-report" onclick="generateAIReport()">🤖 Generate AI Detailed Report</button>
+
         <div class="output">
-            <h3 class="prediction" id="prediction">Prediction: </h3>
-            <h3 class="cyber" id="cyber">Cyber Analysis: </h3>
+            <h3 class="prediction" id="prediction">Prediction: Waiting...</h3>
+            <h3 class="cyber" id="cyber">Cyber Analysis: Waiting...</h3>
         </div>
 
         <div class="graph-box">
@@ -3171,9 +3173,10 @@ function simulate() {
 
     </div>
 
+    <!-- Sidebar for AI Report -->
     <div class="sidebar">
-        <h3>Explanation</h3>
-        <p id="ai_explanation">Waiting for analysis...</p>
+        <h3>AI Detailed Analysis Report</h3>
+        <div id="ai_explanation">Click "Generate AI Detailed Report" after running a prediction to see technical analysis.</div>
     </div>
 
 </div>
@@ -3189,7 +3192,7 @@ const vibrationChart = new Chart(ctx, {
     data: {
         labels: vibrationLabels,
         datasets: [{
-            label: 'Vibration',
+            label: 'Vibration Level',
             data: vibrationValues,
             borderColor: '#38bdf8',
             backgroundColor: 'rgba(56, 189, 248, 0.2)',
@@ -3204,41 +3207,23 @@ const vibrationChart = new Chart(ctx, {
     options: {
         responsive: true,
         maintainAspectRatio: false,
-        animation: {
-            duration: 500
-        },
+        animation: { duration: 800 },
         scales: {
-            x: {
-                ticks: {
-                    color: '#cbd5e1'
-                },
-                grid: {
-                    color: 'rgba(148, 163, 184, 0.15)'
-                }
-            },
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    color: '#cbd5e1'
-                },
-                grid: {
-                    color: 'rgba(148, 163, 184, 0.15)'
-                }
+            x: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(148, 163, 184, 0.15)' } },
+            y: { 
+                beginAtZero: true, 
+                ticks: { color: '#cbd5e1' }, 
+                grid: { color: 'rgba(148, 163, 184, 0.15)' } 
             }
         },
         plugins: {
-            legend: {
-                labels: {
-                    color: '#e2e8f0'
-                }
-            }
+            legend: { labels: { color: '#e2e8f0' } }
         }
     }
 });
 
 function updateVibrationGraph(vibrationValue) {
-    const currentTime = new Date().toLocaleTimeString();
-
+    const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     vibrationLabels.push(currentTime);
     vibrationValues.push(Number(vibrationValue));
 
@@ -3246,14 +3231,17 @@ function updateVibrationGraph(vibrationValue) {
         vibrationLabels.shift();
         vibrationValues.shift();
     }
-
     vibrationChart.update();
 }
 
-function predict(){
+// Store latest results for AI report
+let currentPrediction = "";
+let currentCyber = "";
+
+function predict() {
     fetch('/predict', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             vibration: document.getElementById('vibration').value,
             temperature: document.getElementById('temperature').value,
@@ -3264,22 +3252,25 @@ function predict(){
     })
     .then(res => res.json())
     .then(data => {
-        const vibration = document.getElementById('vibration').value;
+        currentPrediction = data.prediction;
+        currentCyber = data.cyber;
 
         document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
         document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
 
-        updateVibrationGraph(vibration);
+        updateVibrationGraph(document.getElementById('vibration').value);
 
-        document.getElementById('ai_explanation').innerText =
-            "AI analyzed vibration, temperature, and network patterns to detect anomalies. Result: " + data.prediction;
-    });
+        document.getElementById('ai_explanation').innerHTML = 
+            "<em>Run AI Report for detailed technical + cybersecurity analysis...</em>";
+    })
+    .catch(err => console.error(err));
 }
 
-function simulate(){
+function simulate() {
     fetch('/simulate')
     .then(res => res.json())
     .then(data => {
+        // Fill all fields
         document.getElementById('vibration').value = data.vibration;
         document.getElementById('temperature').value = data.temperature;
         document.getElementById('pressure').value = data.pressure;
@@ -3291,14 +3282,51 @@ function simulate(){
         document.getElementById('sound').value = data.sound;
         document.getElementById('humidity').value = data.humidity;
 
+        currentPrediction = data.prediction;
+        currentCyber = data.cyber;
+
         document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
         document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
 
         updateVibrationGraph(data.vibration);
 
-        document.getElementById('ai_explanation').innerText =
-            "Simulated data processed. AI detected system behavior and classified status as: " + data.prediction;
-    });
+        document.getElementById('ai_explanation').innerHTML = 
+            "<em>Simulated data loaded. Click 'Generate AI Detailed Report' for in-depth analysis.</em>";
+    })
+    .catch(err => console.error(err));
+}
+
+async function generateAIReport() {
+    if (!currentPrediction) {
+        alert("Please run Predict or Auto Simulate first!");
+        return;
+    }
+
+    const explanationDiv = document.getElementById('ai_explanation');
+    explanationDiv.innerHTML = "🤖 Generating detailed AI report... Please wait.";
+
+    try {
+        const res = await fetch('/generate_reports', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                prediction: currentPrediction,
+                cyber: currentCyber
+            })
+        });
+
+        const report = await res.json();
+
+        explanationDiv.innerHTML = `
+            <strong>Prediction Analysis:</strong><br>
+            ${report.prediction_report}<br><br>
+            <strong>Cybersecurity Analysis:</strong><br>
+            ${report.cyber_report}
+        `;
+
+    } catch (err) {
+        explanationDiv.innerHTML = `❌ Failed to generate report: ${err.message}`;
+    }
 }
 </script>
 
